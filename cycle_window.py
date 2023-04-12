@@ -64,7 +64,7 @@ def cycle_window(window_list: List[HexNum]):
     subprocess.run(["wmctrl", "-i", "-a", str(next_window)])
 
 
-def run_startup_cmd(cmd: str):
+def run_launch_cmd(cmd: str):
     log.debug(f"No active window found - execute startup cmd: {cmd}")
     subprocess.run(cmd.split(" "))
 
@@ -72,7 +72,7 @@ def run_startup_cmd(cmd: str):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("app_name", help="(Sub)string (case-sensitive) to identify the application that shall be cycled through")
-    parser.add_argument("startup_cmd", help="Command that should be executed if no application with <app_name> was found")
+    parser.add_argument("launch_cmd", help="Command that should be executed if no application with <app_name> was found")
     parser.add_argument("--log", default="INFO", help="Define the level of log messages which should be logged - 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL' - default: 'INFO'")
     parser.add_argument("--log-file", help="Provide a filepath if the logs should be written to that file instead of stderr. The directory of the file must already exist")
     args = parser.parse_args()
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     window_list = get_window_id_list(args.app_name)
     log.debug(f"windows:\n{window_list}")
     if len(window_list) == 0:
-        run_startup_cmd(args.startup_cmd)
+        run_launch_cmd(args.launch_cmd)
     else:
         cycle_window(window_list)
     
