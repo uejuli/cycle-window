@@ -41,8 +41,6 @@ def get_window_id_list(window_class: str) -> List[HexNum]:
 
 def get_next_window_id(window_list: List[HexNum], active_window: HexNum) -> HexNum:
     found = False
-    # skip last_id, because if the active window is the last in the list
-    # we want to jump back to the first
     for window_id in window_list + [window_list[0]]:
         if found:
             break
