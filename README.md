@@ -20,8 +20,8 @@ Currently only Linux is supported.
 Save the script `cycle_window.py` locally. Assign a key-bind of your OS that invokes the script
 
 ```bash
-python cycle_window.py <APP_NAME> <LAUNCH_COMMAND>
+python cycle_window.py <WINDOW_CLASS> <LAUNCH_COMMAND>
 ```
 
-* `APP_NAME`: (sub)string to recognize the application as they appear in `wmctrl -l`
-* `LAUNCH_COMMAND`: command which will be executed if no matching window with `APP_NAME` was found. Use this to launch the application
+* `WINDOW_CLASS`: (sub)string to find running instances of the application by its window-class (check `wmctrl -l -x`)
+* `LAUNCH_COMMAND`: command which will be executed if no matching window with `WINDOW_CLASS` was found. Use this to launch the application

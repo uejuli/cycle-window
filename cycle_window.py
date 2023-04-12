@@ -31,9 +31,9 @@ def get_active_window_id() -> HexNum:
     return HexNum(active_window)
 
 
-def get_window_id_list(app_name: str) -> List[HexNum]:
-    ps = subprocess.run(["wmctrl", "-l"], capture_output=True)
-    window_list = subprocess.run(["grep", app_name], input=ps.stdout, capture_output=True)
+def get_window_id_list(window_class: str) -> List[HexNum]:
+    ps = subprocess.run(["wmctrl", "-l", "-x"], capture_output=True)
+    window_list = subprocess.run(["grep", window_class], input=ps.stdout, capture_output=True)
     window_list = window_list.stdout.decode("utf-8").split("\n")
     window_list = [HexNum(window.split(" ")[0]) for window in window_list[:-1]]
     return window_list
@@ -71,15 +71,15 @@ def run_launch_cmd(cmd: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("app_name", help="(Sub)string (case-sensitive) to identify the application that shall be cycled through")
-    parser.add_argument("launch_cmd", help="Command that should be executed if no application with <app_name> was found")
+    parser.add_argument("window_class", help="(Sub)string to identify the application by the window class that should be cycled through")
+    parser.add_argument("launch_cmd", help="Command that should be executed if no application with a window class matching <window_class> was found")
     parser.add_argument("--log", default="INFO", help="Define the level of log messages which should be logged - 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL' - default: 'INFO'")
     parser.add_argument("--log-file", help="Provide a filepath if the logs should be written to that file instead of stderr. The directory of the file must already exist")
     args = parser.parse_args()
 
     logging.basicConfig(filename=args.log_file, filemode='w', level=logging.getLevelName(args.log))
 
-    window_list = get_window_id_list(args.app_name)
+    window_list = get_window_id_list(args.window_class)
     log.debug(f"windows:\n{window_list}")
     if len(window_list) == 0:
         run_launch_cmd(args.launch_cmd)
